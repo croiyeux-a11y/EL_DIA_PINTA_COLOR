@@ -9,7 +9,6 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_PUBLISHABLE_KEY
 );
 
-
 const pollDate =
     document.getElementById("poll-date");
 
@@ -37,15 +36,12 @@ const resultsSection =
 const resultsContainer =
     document.getElementById("results-container");
 
-
 let encuestaActual = null;
-
 
 document.addEventListener(
     "DOMContentLoaded",
     cargarEncuesta
 );
-
 
 async function cargarEncuesta() {
 
@@ -84,22 +80,17 @@ async function cargarEncuesta() {
             return;
         }
 
-
         encuestaActual = data[0];
-
 
         pollTitle.textContent =
             encuestaActual.titulo;
-
 
         pollDate.textContent =
             formatearFecha(
                 encuestaActual.fecha
             );
 
-
         await cargarOpciones();
-
 
         limpiarMensaje();
 
@@ -117,8 +108,6 @@ async function cargarEncuesta() {
     }
 }
 
-
-
 async function cargarOpciones() {
 
     const { data, error } =
@@ -126,11 +115,9 @@ async function cargarOpciones() {
             "obtener_opciones_activas"
         );
 
-
     if (error) {
         throw error;
     }
-
 
     if (!data || data.length === 0) {
 
@@ -145,36 +132,23 @@ async function cargarOpciones() {
         return;
     }
 
-
     optionsContainer.innerHTML = "";
 
-
-    /*
-        Emoji asociado a cada color.
-
-        1 = Azul marino
-        2 = Verde oliva / verde militar
-        3 = Mostaza / camel
-        4 = Negro el clásico
-        5 = Blanco puro y casto
-    */
-const emojis = {
-    1: "🌊",
-    2: "🫒",
-    3: "🐪",
-    4: "🖤",
-    5: "👻"
-};
+    const emojis = {
+        1: "🌊",
+        2: "🫒",
+        3: "🐪",
+        4: "🖤",
+        5: "👻"
+    };
 
     data.forEach((opcion) => {
 
         const optionId =
             `color-${opcion.id}`;
 
-
         const emoji =
             emojis[opcion.id] || "";
-
 
         const optionHTML = `
 
@@ -188,7 +162,6 @@ const emojis = {
                     required
                 >
 
-
                 <label for="${optionId}">
 
                     <span
@@ -196,7 +169,6 @@ const emojis = {
                         style="background-color: ${opcion.color_hex};"
                         aria-hidden="true"
                     ></span>
-
 
                     <span class="color-name">
 
@@ -212,29 +184,22 @@ const emojis = {
 
         `;
 
-
         optionsContainer.insertAdjacentHTML(
             "beforeend",
             optionHTML
         );
 
     });
-
 }
-
-
 
 pollForm.addEventListener(
     "submit",
     registrarVoto
 );
 
-
-
 async function registrarVoto(event) {
 
     event.preventDefault();
-
 
     if (!encuestaActual) {
 
@@ -246,12 +211,10 @@ async function registrarVoto(event) {
         return;
     }
 
-
     const opcionSeleccionada =
         document.querySelector(
             'input[name="opcion"]:checked'
         );
-
 
     if (!opcionSeleccionada) {
 
@@ -263,10 +226,8 @@ async function registrarVoto(event) {
         return;
     }
 
-
     const nombre =
         personaInput.value.trim();
-
 
     if (nombre.length < 2) {
 
@@ -280,7 +241,6 @@ async function registrarVoto(event) {
         return;
     }
 
-
     if (nombre.length > 60) {
 
         mostrarMensaje(
@@ -293,18 +253,15 @@ async function registrarVoto(event) {
         return;
     }
 
-
     const opcionId =
         Number(
             opcionSeleccionada.value
         );
 
-
     voteButton.disabled = true;
 
     voteButton.textContent =
         "Registrando voto...";
-
 
     try {
 
@@ -323,31 +280,27 @@ async function registrarVoto(event) {
                 }
             );
 
-
         if (error) {
             throw error;
         }
-
 
         console.log(
             "Voto registrado correctamente:",
             data
         );
 
-
         mostrarMensaje(
-            "¡Tu voto ha sido registrado!",
+            `¡Ya has votado!
+El plan sigue adelante. Nadie sabe cuál, pero sigue adelante.
+Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
             "success"
         );
-
 
         voteButton.textContent =
             "Voto registrado";
 
-
         personaInput.disabled =
             true;
-
 
         document
             .querySelectorAll(
@@ -355,42 +308,32 @@ async function registrarVoto(event) {
             )
             .forEach(
                 input => {
-
                     input.disabled =
                         true;
-
                 }
             );
 
-
         await cargarResultados();
-
 
     } catch (error) {
 
         console.error(
-            "Error registrando voto:",
+            "Error registrando el voto:",
             error
         );
-
 
         mostrarMensaje(
             obtenerMensajeError(error),
             "error"
         );
 
-
         voteButton.disabled =
             false;
-
 
         voteButton.textContent =
             "Votar";
     }
-
 }
-
-
 
 async function cargarResultados() {
 
@@ -399,20 +342,16 @@ async function cargarResultados() {
             "obtener_resultados"
         );
 
-
     if (error) {
         throw error;
     }
-
 
     if (!data) {
         return;
     }
 
-
     resultsContainer.innerHTML =
         "";
-
 
     data.forEach((resultado) => {
 
@@ -420,7 +359,6 @@ async function cargarResultados() {
             Number(
                 resultado.porcentaje
             ) || 0;
-
 
         const resultHTML = `
 
@@ -436,7 +374,6 @@ async function cargarResultados() {
 
                     </span>
 
-
                     <span class="result-percentage">
 
                         ${porcentaje}%
@@ -444,7 +381,6 @@ async function cargarResultados() {
                     </span>
 
                 </div>
-
 
                 <div class="result-bar">
 
@@ -462,7 +398,6 @@ async function cargarResultados() {
 
         `;
 
-
         resultsContainer.insertAdjacentHTML(
             "beforeend",
             resultHTML
@@ -470,43 +405,32 @@ async function cargarResultados() {
 
     });
 
-
     resultsSection.classList.remove(
         "hidden"
     );
-
 }
-
-
 
 function mostrarMensaje(
     texto,
     tipo = ""
 ) {
 
-    message.textContent =
-        texto;
-
+    message.innerHTML =
+        escapeHTML(texto)
+            .replace(/\n/g, "<br>");
 
     message.className =
         `message ${tipo}`;
-
 }
-
-
 
 function limpiarMensaje() {
 
     message.textContent =
         "";
 
-
     message.className =
         "message";
-
 }
-
-
 
 function formatearFecha(
     fecha
@@ -514,7 +438,6 @@ function formatearFecha(
 
     const partes =
         fecha.split("-");
-
 
     const fechaLocal =
         new Date(
@@ -527,7 +450,6 @@ function formatearFecha(
 
         );
 
-
     return fechaLocal.toLocaleDateString(
         "es-ES",
         {
@@ -537,10 +459,7 @@ function formatearFecha(
             year: "numeric"
         }
     );
-
 }
-
-
 
 function escapeHTML(
     texto
@@ -551,16 +470,11 @@ function escapeHTML(
             "div"
         );
 
-
     div.textContent =
         texto;
 
-
     return div.innerHTML;
-
 }
-
-
 
 function obtenerMensajeError(
     error
@@ -568,7 +482,6 @@ function obtenerMensajeError(
 
     const mensaje =
         error?.message || "";
-
 
     if (
         mensaje.includes(
@@ -579,9 +492,7 @@ function obtenerMensajeError(
         return (
             "El nombre debe tener al menos 2 caracteres."
         );
-
     }
-
 
     if (
         mensaje.includes(
@@ -592,9 +503,7 @@ function obtenerMensajeError(
         return (
             "El nombre no puede superar los 60 caracteres."
         );
-
     }
-
 
     if (
         mensaje.includes(
@@ -605,9 +514,7 @@ function obtenerMensajeError(
         return (
             "La encuesta ya no está activa."
         );
-
     }
-
 
     if (
         mensaje.includes(
@@ -618,12 +525,9 @@ function obtenerMensajeError(
         return (
             "La opción seleccionada no es válida."
         );
-
     }
-
 
     return (
         "No se ha podido registrar el voto."
     );
-
 }
