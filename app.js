@@ -82,8 +82,9 @@ async function cargarEncuesta() {
 
         encuestaActual = data[0];
 
-        pollTitle.textContent =
-            encuestaActual.titulo;
+       pollTitle.innerHTML =
+    `¿Qué color pinta hoy?<br>
+    <span>Elige un color y fingimos que tenemos un plan.</span>`;
 
         pollDate.textContent =
             formatearFecha(
