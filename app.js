@@ -9,6 +9,7 @@ const supabaseClient = window.supabase.createClient(
     SUPABASE_PUBLISHABLE_KEY
 );
 
+
 const pollDate =
     document.getElementById("poll-date");
 
@@ -36,12 +37,15 @@ const resultsSection =
 const resultsContainer =
     document.getElementById("results-container");
 
+
 let encuestaActual = null;
+
 
 document.addEventListener(
     "DOMContentLoaded",
     cargarEncuesta
 );
+
 
 async function cargarEncuesta() {
 
@@ -51,6 +55,53 @@ async function cargarEncuesta() {
 
     try {
 
+        /*
+         * Comprobamos primero si estamos
+         * dentro del horario de votación:
+         *
+         * 14:00 → 01:00
+         */
+        const { data: horario, error: errorHorario } =
+            await supabaseClient.rpc(
+                "esta_en_horario_de_votacion"
+            );
+
+        if (errorHorario) {
+            throw errorHorario;
+        }
+
+
+        /*
+         * Fuera del horario:
+         * no mostramos las opciones ni
+         * permitimos votar.
+         */
+        if (!horario) {
+
+            pollDate.textContent = "";
+
+            pollTitle.textContent =
+                "La votación está cerrada";
+
+            optionsContainer.innerHTML = `
+                <p class="loading">
+                    La encuesta abre todos los días a las 14:00
+                    y cierra a la 01:00.
+                </p>
+            `;
+
+            voteButton.disabled = true;
+
+            limpiarMensaje();
+
+            return;
+        }
+
+
+        /*
+         * Estamos dentro del horario.
+         * Cargamos la encuesta activa.
+         */
         const { data, error } =
             await supabaseClient.rpc(
                 "obtener_encuesta_activa"
@@ -59,6 +110,7 @@ async function cargarEncuesta() {
         if (error) {
             throw error;
         }
+
 
         if (!data || data.length === 0) {
 
@@ -80,18 +132,23 @@ async function cargarEncuesta() {
             return;
         }
 
+
         encuestaActual = data[0];
 
-       pollTitle.innerHTML =
-    `¿Qué color pinta hoy?<br>
-    <span>Elige un color y fingimos que tenemos un plan.</span>`;
+
+        pollTitle.innerHTML =
+            `¿Qué color pinta hoy?<br>
+            <span>Elige un color y fingimos que tenemos un plan.</span>`;
+
 
         pollDate.textContent =
             formatearFecha(
                 encuestaActual.fecha
             );
 
+
         await cargarOpciones();
+
 
         limpiarMensaje();
 
@@ -109,6 +166,7 @@ async function cargarEncuesta() {
     }
 }
 
+
 async function cargarOpciones() {
 
     const { data, error } =
@@ -119,6 +177,7 @@ async function cargarOpciones() {
     if (error) {
         throw error;
     }
+
 
     if (!data || data.length === 0) {
 
@@ -133,7 +192,9 @@ async function cargarOpciones() {
         return;
     }
 
+
     optionsContainer.innerHTML = "";
+
 
     const emojis = {
         1: "🌊",
@@ -143,13 +204,16 @@ async function cargarOpciones() {
         5: "👻"
     };
 
+
     data.forEach((opcion) => {
 
         const optionId =
             `color-${opcion.id}`;
 
+
         const emoji =
             emojis[opcion.id] || "";
+
 
         const optionHTML = `
 
@@ -185,6 +249,7 @@ async function cargarOpciones() {
 
         `;
 
+
         optionsContainer.insertAdjacentHTML(
             "beforeend",
             optionHTML
@@ -193,14 +258,17 @@ async function cargarOpciones() {
     });
 }
 
+
 pollForm.addEventListener(
     "submit",
     registrarVoto
 );
 
+
 async function registrarVoto(event) {
 
     event.preventDefault();
+
 
     if (!encuestaActual) {
 
@@ -212,10 +280,12 @@ async function registrarVoto(event) {
         return;
     }
 
+
     const opcionSeleccionada =
         document.querySelector(
             'input[name="opcion"]:checked'
         );
+
 
     if (!opcionSeleccionada) {
 
@@ -227,8 +297,10 @@ async function registrarVoto(event) {
         return;
     }
 
+
     const nombre =
         personaInput.value.trim();
+
 
     if (nombre.length < 2) {
 
@@ -242,6 +314,7 @@ async function registrarVoto(event) {
         return;
     }
 
+
     if (nombre.length > 60) {
 
         mostrarMensaje(
@@ -254,15 +327,18 @@ async function registrarVoto(event) {
         return;
     }
 
+
     const opcionId =
         Number(
             opcionSeleccionada.value
         );
 
+
     voteButton.disabled = true;
 
     voteButton.textContent =
         "Registrando voto...";
+
 
     try {
 
@@ -281,14 +357,17 @@ async function registrarVoto(event) {
                 }
             );
 
+
         if (error) {
             throw error;
         }
+
 
         console.log(
             "Voto registrado correctamente:",
             data
         );
+
 
         mostrarMensaje(
             `¡Ya has votado!
@@ -297,11 +376,14 @@ Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
             "success"
         );
 
+
         voteButton.textContent =
             "Voto registrado";
 
+
         personaInput.disabled =
             true;
+
 
         document
             .querySelectorAll(
@@ -314,7 +396,9 @@ Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
                 }
             );
 
+
         await cargarResultados();
+
 
     } catch (error) {
 
@@ -323,18 +407,22 @@ Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
             error
         );
 
+
         mostrarMensaje(
             obtenerMensajeError(error),
             "error"
         );
 
+
         voteButton.disabled =
             false;
+
 
         voteButton.textContent =
             "Votar";
     }
 }
+
 
 async function cargarResultados() {
 
@@ -343,16 +431,20 @@ async function cargarResultados() {
             "obtener_resultados"
         );
 
+
     if (error) {
         throw error;
     }
+
 
     if (!data) {
         return;
     }
 
+
     resultsContainer.innerHTML =
         "";
+
 
     data.forEach((resultado) => {
 
@@ -360,6 +452,7 @@ async function cargarResultados() {
             Number(
                 resultado.porcentaje
             ) || 0;
+
 
         const resultHTML = `
 
@@ -383,6 +476,7 @@ async function cargarResultados() {
 
                 </div>
 
+
                 <div class="result-bar">
 
                     <div
@@ -399,6 +493,7 @@ async function cargarResultados() {
 
         `;
 
+
         resultsContainer.insertAdjacentHTML(
             "beforeend",
             resultHTML
@@ -406,10 +501,12 @@ async function cargarResultados() {
 
     });
 
+
     resultsSection.classList.remove(
         "hidden"
     );
 }
+
 
 function mostrarMensaje(
     texto,
@@ -420,9 +517,11 @@ function mostrarMensaje(
         escapeHTML(texto)
             .replace(/\n/g, "<br>");
 
+
     message.className =
         `message ${tipo}`;
 }
+
 
 function limpiarMensaje() {
 
@@ -433,6 +532,7 @@ function limpiarMensaje() {
         "message";
 }
 
+
 function formatearFecha(
     fecha
 ) {
@@ -440,16 +540,14 @@ function formatearFecha(
     const partes =
         fecha.split("-");
 
+
     const fechaLocal =
         new Date(
-
             Number(partes[0]),
-
             Number(partes[1]) - 1,
-
             Number(partes[2])
-
         );
+
 
     return fechaLocal.toLocaleDateString(
         "es-ES",
@@ -462,6 +560,7 @@ function formatearFecha(
     );
 }
 
+
 function escapeHTML(
     texto
 ) {
@@ -471,11 +570,14 @@ function escapeHTML(
             "div"
         );
 
+
     div.textContent =
         texto;
 
+
     return div.innerHTML;
 }
+
 
 function obtenerMensajeError(
     error
@@ -483,6 +585,21 @@ function obtenerMensajeError(
 
     const mensaje =
         error?.message || "";
+
+
+    if (
+        mensaje.includes(
+            "La votación está cerrada"
+        )
+    ) {
+
+        return (
+            "La votación está cerrada. " +
+            "Abre todos los días a las 14:00 " +
+            "y cierra a la 01:00."
+        );
+    }
+
 
     if (
         mensaje.includes(
@@ -495,6 +612,7 @@ function obtenerMensajeError(
         );
     }
 
+
     if (
         mensaje.includes(
             "El nombre no puede superar los 60 caracteres"
@@ -505,6 +623,7 @@ function obtenerMensajeError(
             "El nombre no puede superar los 60 caracteres."
         );
     }
+
 
     if (
         mensaje.includes(
@@ -517,6 +636,7 @@ function obtenerMensajeError(
         );
     }
 
+
     if (
         mensaje.includes(
             "La opción seleccionada no pertenece"
@@ -527,6 +647,7 @@ function obtenerMensajeError(
             "La opción seleccionada no es válida."
         );
     }
+
 
     return (
         "No se ha podido registrar el voto."
