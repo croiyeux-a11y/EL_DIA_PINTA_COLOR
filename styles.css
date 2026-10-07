@@ -1,0 +1,473 @@
+/* ============================================
+   EL COLOR DEL DÍA
+   Estilos principales
+   ============================================ */
+
+:root {
+    --bg: #f4f1eb;
+    --surface: #fffdf9;
+    --text: #171717;
+    --muted: #77736c;
+    --border: #ded9d0;
+    --accent: #171717;
+    --success: #526b4f;
+
+    --radius: 18px;
+    --shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
+}
+
+
+/* ============================================
+   RESET
+   ============================================ */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    line-height: 1.5;
+}
+
+
+/* ============================================
+   APP
+   ============================================ */
+
+.app {
+    width: min(100%, 680px);
+    margin: 0 auto;
+    padding: 28px 20px 40px;
+}
+
+
+/* ============================================
+   HEADER
+   ============================================ */
+
+.header {
+    padding: 35px 4px 45px;
+}
+
+.eyebrow {
+    margin-bottom: 14px;
+
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+
+    color: var(--muted);
+}
+
+.header h1 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(3.4rem, 15vw, 6rem);
+    font-weight: 400;
+    line-height: 0.9;
+    letter-spacing: -0.055em;
+}
+
+.intro {
+    margin-top: 25px;
+
+    color: var(--muted);
+
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+
+/* ============================================
+   ENCUESTA
+   ============================================ */
+
+.poll {
+    background: var(--surface);
+
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+
+    padding: 24px 20px;
+
+    box-shadow: var(--shadow);
+}
+
+.poll-heading {
+    margin-bottom: 28px;
+}
+
+.poll-date {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: var(--muted);
+
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.poll-heading h2 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 1.8rem;
+    font-weight: 400;
+    line-height: 1.15;
+}
+
+
+/* ============================================
+   OPCIONES
+   ============================================ */
+
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.color-option {
+    position: relative;
+}
+
+.color-option input {
+    position: absolute;
+
+    width: 1px;
+    height: 1px;
+
+    opacity: 0;
+}
+
+.color-option label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-height: 64px;
+
+    padding: 12px 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 14px;
+
+    background: #fff;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.color-option label:hover {
+    transform: translateY(-1px);
+
+    border-color: #aaa49b;
+}
+
+.color-option input:checked + label {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 2px var(--accent);
+
+    transform: translateY(-1px);
+}
+
+.color-preview {
+    flex: 0 0 auto;
+
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
+    box-shadow:
+        inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+}
+
+.color-name {
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
+
+/* ============================================
+   NOMBRE
+   ============================================ */
+
+.name-field {
+    margin-top: 25px;
+}
+
+.name-field label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+}
+
+.name-field input {
+    width: 100%;
+
+    min-height: 54px;
+
+    padding: 0 15px;
+
+    border: 1px solid var(--border);
+    border-radius: 12px;
+
+    background: #fff;
+
+    color: var(--text);
+
+    font: inherit;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.name-field input::placeholder {
+    color: #aaa59d;
+}
+
+.name-field input:focus {
+    border-color: var(--accent);
+
+    box-shadow:
+        0 0 0 3px rgba(23, 23, 23, 0.08);
+}
+
+
+/* ============================================
+   BOTÓN
+   ============================================ */
+
+.vote-button {
+    width: 100%;
+
+    min-height: 56px;
+
+    margin-top: 18px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background: var(--accent);
+    color: #fff;
+
+    font: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.vote-button:hover {
+    opacity: 0.9;
+}
+
+.vote-button:active {
+    transform: scale(0.98);
+}
+
+.vote-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+/* ============================================
+   RESULTADOS
+   ============================================ */
+
+.results-section {
+    margin-top: 45px;
+}
+
+.results-heading {
+    margin-bottom: 20px;
+}
+
+.results-heading h2 {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.1;
+}
+
+.results-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.result-item {
+    padding-bottom: 12px;
+}
+
+.result-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 7px;
+
+    font-size: 0.9rem;
+}
+
+.result-name {
+    font-weight: 600;
+}
+
+.result-percentage {
+    color: var(--muted);
+    font-weight: 700;
+}
+
+.result-bar {
+    width: 100%;
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+    background: #e4e0d9;
+}
+
+.result-fill {
+    height: 100%;
+
+    border-radius: inherit;
+
+    transition: width 0.6s ease;
+}
+
+
+/* ============================================
+   MENSAJES
+   ============================================ */
+
+.message {
+    min-height: 24px;
+
+    margin-top: 16px;
+
+    text-align: center;
+
+    font-size: 0.9rem;
+    color: var(--muted);
+}
+
+.message.success {
+    color: var(--success);
+}
+
+.message.error {
+    color: #9b3d35;
+}
+
+
+/* ============================================
+   CARGANDO
+   ============================================ */
+
+.loading {
+    padding: 25px 0;
+
+    text-align: center;
+
+    color: var(--muted);
+}
+
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+
+.hidden {
+    display: none;
+}
+
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+.footer {
+    padding: 45px 4px 10px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+
+/* ============================================
+   TABLET / ESCRITORIO
+   ============================================ */
+
+@media (min-width: 700px) {
+
+    .app {
+        padding-top: 55px;
+    }
+
+    .header {
+        padding-bottom: 55px;
+    }
+
+    .poll {
+        padding: 32px;
+    }
+
+}

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>El color del día</title>
+
+    <meta
+        name="description"
+        content="Vota por tu color favorito del día."
+    >
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <main class="app">
+
+        <header class="header">
+            <p class="eyebrow">ENCUESTA DIARIA</p>
+
+            <h1>El color<br>del día</h1>
+
+            <p class="intro">
+                Una pregunta sencilla.<br>
+                Un color para hoy.
+            </p>
+        </header>
+
+
+        <section class="poll" aria-labelledby="poll-title">
+
+            <div class="poll-heading">
+                <span class="poll-date" id="poll-date">
+                    Cargando...
+                </span>
+
+                <h2 id="poll-title">
+                    ¿Qué color eliges hoy?
+                </h2>
+            </div>
+
+
+            <form id="poll-form">
+
+                <div
+                    id="options-container"
+                    class="options-container"
+                >
+                    <p class="loading">
+                        Cargando opciones...
+                    </p>
+                </div>
+
+
+                <div class="name-field">
+
+                    <label for="persona">
+                        Tu nombre
+                    </label>
+
+                    <input
+                        type="text"
+                        id="persona"
+                        name="persona"
+                        placeholder="Escribe tu nombre"
+                        maxlength="60"
+                        autocomplete="name"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    id="vote-button"
+                    class="vote-button"
+                >
+                    Votar
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <section
+            id="results-section"
+            class="results-section hidden"
+            aria-labelledby="results-title"
+        >
+
+            <div class="results-heading">
+
+                <p class="eyebrow">
+                    RESULTADOS
+                </p>
+
+                <h2 id="results-title">
+                    Así va la votación
+                </h2>
+
+            </div>
+
+            <div
+                id="results-container"
+                class="results-container"
+            ></div>
+
+        </section>
+
+
+        <div
+            id="message"
+            class="message"
+            role="status"
+            aria-live="polite"
+        ></div>
+
+
+        <footer class="footer">
+            <p>El color del día</p>
+        </footer>
+
+    </main>
+
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Nuestra aplicación -->
+    <script src="app.js"></script>
+
+</body>
+</html>
