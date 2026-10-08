@@ -11,6 +11,7 @@
     --border: #ded9d0;
     --accent: #171717;
     --success: #526b4f;
+    --danger: #9b3d35;
 
     --radius: 18px;
     --shadow: 0 12px 35px rgba(0, 0, 0, 0.06);
@@ -33,6 +34,7 @@ html {
 
 body {
     min-height: 100vh;
+
     background: var(--bg);
     color: var(--text);
 
@@ -53,7 +55,9 @@ body {
 
 .app {
     width: min(100%, 680px);
+
     margin: 0 auto;
+
     padding: 28px 20px 40px;
 }
 
@@ -71,6 +75,7 @@ body {
 
     font-size: 0.72rem;
     font-weight: 700;
+
     letter-spacing: 0.16em;
     text-transform: uppercase;
 
@@ -84,8 +89,11 @@ body {
         serif;
 
     font-size: clamp(3.4rem, 15vw, 6rem);
+
     font-weight: 400;
+
     line-height: 0.9;
+
     letter-spacing: -0.055em;
 }
 
@@ -95,6 +103,7 @@ body {
     color: var(--muted);
 
     font-size: 1rem;
+
     line-height: 1.6;
 }
 
@@ -127,7 +136,9 @@ body {
 
     font-size: 0.75rem;
     font-weight: 700;
+
     letter-spacing: 0.12em;
+
     text-transform: uppercase;
 }
 
@@ -138,24 +149,50 @@ body {
         serif;
 
     font-size: 1.8rem;
+
     font-weight: 400;
+
     line-height: 1.15;
+}
+
+.poll-heading h2 span {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--muted);
+
+    font-family:
+        Inter,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    font-size: 0.92rem;
+
+    line-height: 1.45;
 }
 
 
 /* ============================================
-   OPCIONES
+   OPCIONES DE COLOR
    ============================================ */
 
 .options-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 12px;
 }
 
 .color-option {
     position: relative;
 }
+
+
+/* Ocultamos el radio original */
 
 .color-option input {
     position: absolute;
@@ -166,60 +203,145 @@ body {
     opacity: 0;
 }
 
+
+/* Tarjeta */
+
 .color-option label {
+    position: relative;
+
     display: flex;
+
     align-items: center;
-    gap: 14px;
+    justify-content: space-between;
 
-    min-height: 64px;
+    min-height: 92px;
 
-    padding: 12px 15px;
+    padding: 16px 18px;
 
-    border: 1px solid var(--border);
-    border-radius: 14px;
+    overflow: hidden;
 
-    background: #fff;
+    border: 3px solid transparent;
+
+    border-radius: 16px;
+
+    background-color: var(--option-color, #ffffff);
+
+    color: #171717;
 
     cursor: pointer;
 
     transition:
-        border-color 0.2s ease,
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        filter 0.2s ease;
 }
+
+
+/* Ajustes automáticos para colores oscuros */
+
+.color-option label[style*="#111111"],
+.color-option label[style*="#800020"],
+.color-option label[style*="#7B3F98"] {
+    color: #ffffff;
+}
+
+
+/* Hover */
 
 .color-option label:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
 
-    border-color: #aaa49b;
-}
-
-.color-option input:checked + label {
-    border-color: var(--accent);
+    filter: brightness(1.03);
 
     box-shadow:
-        0 0 0 2px var(--accent);
-
-    transform: translateY(-1px);
+        0 8px 18px rgba(0, 0, 0, 0.10);
 }
 
-.color-preview {
-    flex: 0 0 auto;
 
-    width: 38px;
-    height: 38px;
+/* Opción seleccionada */
+
+.color-option input:checked + label {
+    border-color: #171717;
+
+    box-shadow:
+        0 0 0 3px rgba(255, 255, 255, 0.95),
+        0 0 0 6px #171717,
+        0 10px 24px rgba(0, 0, 0, 0.16);
+
+    transform: translateY(-2px);
+}
+
+
+/* Nombre del color */
+
+.color-name {
+    position: relative;
+    z-index: 2;
+
+    font-size: 1rem;
+
+    font-weight: 800;
+
+    text-transform: capitalize;
+}
+
+
+/* Emoji */
+
+.color-emoji {
+    position: relative;
+    z-index: 2;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 48px;
+    height: 48px;
+
+    flex: 0 0 48px;
 
     border-radius: 50%;
 
-    border: 1px solid rgba(0, 0, 0, 0.12);
+    background: rgba(255, 255, 255, 0.72);
+
+    font-size: 1.85rem;
+
+    line-height: 1;
 
     box-shadow:
-        inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+        0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
-.color-name {
-    font-size: 0.98rem;
-    font-weight: 600;
+
+/* Pequeño indicador visual de selección */
+
+.color-option input:checked + label::after {
+    content: "✓";
+
+    position: absolute;
+
+    top: 8px;
+    left: 10px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 24px;
+    height: 24px;
+
+    border-radius: 50%;
+
+    background: #171717;
+
+    color: #ffffff;
+
+    font-size: 0.8rem;
+    font-weight: 800;
 }
 
 
@@ -237,7 +359,9 @@ body {
     margin-bottom: 8px;
 
     font-size: 0.8rem;
+
     font-weight: 700;
+
     letter-spacing: 0.04em;
 }
 
@@ -288,23 +412,30 @@ body {
     margin-top: 18px;
 
     border: 0;
+
     border-radius: 12px;
 
     background: var(--accent);
+
     color: #fff;
 
     font: inherit;
+
     font-weight: 700;
 
     cursor: pointer;
 
     transition:
         transform 0.2s ease,
-        opacity 0.2s ease;
+        opacity 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .vote-button:hover {
     opacity: 0.9;
+
+    box-shadow:
+        0 8px 18px rgba(0, 0, 0, 0.12);
 }
 
 .vote-button:active {
@@ -313,7 +444,34 @@ body {
 
 .vote-button:disabled {
     opacity: 0.5;
+
     cursor: not-allowed;
+
+    box-shadow: none;
+}
+
+
+/* ============================================
+   FIRMA CROMÁTICA
+   ============================================ */
+
+.firma-cromatica {
+    margin-top: 14px;
+
+    text-align: center;
+
+    color: var(--muted);
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 0.78rem;
+
+    font-style: italic;
+
+    letter-spacing: 0.02em;
 }
 
 
@@ -336,15 +494,149 @@ body {
         serif;
 
     font-size: 2rem;
+
     font-weight: 400;
+
     line-height: 1.1;
 }
 
 .results-container {
     display: flex;
+
     flex-direction: column;
-    gap: 14px;
+
+    gap: 18px;
 }
+
+
+/* ============================================
+   TARJETA DEL GANADOR
+   ============================================ */
+
+.winner-card {
+    overflow: hidden;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+}
+
+.winner-color {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    min-height: 110px;
+
+    padding: 22px;
+
+    background: var(--winner-color, #ffffff);
+
+    color: #171717;
+}
+
+.winner-name {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 2rem;
+
+    font-weight: 400;
+
+    text-transform: capitalize;
+}
+
+.winner-votes {
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: rgba(255, 255, 255, 0.75);
+
+    font-size: 0.8rem;
+
+    font-weight: 800;
+}
+
+.winner-message {
+    padding: 24px;
+
+    color: var(--text);
+
+    font-size: 0.98rem;
+
+    line-height: 1.7;
+}
+
+.winner-message strong {
+    font-weight: 800;
+}
+
+
+/* ============================================
+   PARTICIPANTES
+   ============================================ */
+
+.participants-card {
+    padding: 22px;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    background: var(--surface);
+
+    box-shadow: var(--shadow);
+}
+
+.participants-card h3 {
+    margin-bottom: 14px;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 1.45rem;
+
+    font-weight: 400;
+}
+
+.participants-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.participants-list span {
+    display: inline-block;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: #eeeae3;
+
+    color: var(--text);
+
+    font-size: 0.82rem;
+
+    font-weight: 600;
+}
+
+
+/* ============================================
+   RESULTADOS ANTIGUOS / COMPATIBILIDAD
+   ============================================ */
 
 .result-item {
     padding-bottom: 12px;
@@ -352,6 +644,7 @@ body {
 
 .result-top {
     display: flex;
+
     align-items: center;
     justify-content: space-between;
 
@@ -366,11 +659,13 @@ body {
 
 .result-percentage {
     color: var(--muted);
+
     font-weight: 700;
 }
 
 .result-bar {
     width: 100%;
+
     height: 8px;
 
     overflow: hidden;
@@ -401,6 +696,7 @@ body {
     text-align: center;
 
     font-size: 0.9rem;
+
     color: var(--muted);
 }
 
@@ -409,7 +705,7 @@ body {
 }
 
 .message.error {
-    color: #9b3d35;
+    color: var(--danger);
 }
 
 
@@ -447,7 +743,9 @@ body {
     color: var(--muted);
 
     font-size: 0.75rem;
+
     letter-spacing: 0.08em;
+
     text-transform: uppercase;
 }
 
@@ -470,4 +768,89 @@ body {
         padding: 32px;
     }
 
+    .options-container {
+        gap: 14px;
+    }
+
+    .color-option label {
+        min-height: 100px;
+
+        padding: 18px 20px;
+    }
+
+    .color-emoji {
+        width: 52px;
+        height: 52px;
+
+        flex-basis: 52px;
+
+        font-size: 2rem;
+    }
+}
+
+
+/* ============================================
+   MÓVIL
+   ============================================ */
+
+@media (max-width: 480px) {
+
+    .app {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .header {
+        padding-top: 25px;
+        padding-bottom: 35px;
+    }
+
+    .poll {
+        padding: 20px 15px;
+    }
+
+    .poll-heading h2 {
+        font-size: 1.55rem;
+    }
+
+    .options-container {
+        gap: 9px;
+    }
+
+    .color-option label {
+        min-height: 82px;
+
+        padding: 13px 12px;
+
+        border-radius: 14px;
+    }
+
+    .color-name {
+        font-size: 0.9rem;
+    }
+
+    .color-emoji {
+        width: 42px;
+        height: 42px;
+
+        flex-basis: 42px;
+
+        font-size: 1.55rem;
+    }
+
+    .winner-color {
+        min-height: 95px;
+
+        padding: 18px;
+    }
+
+    .winner-name {
+        font-size: 1.6rem;
+    }
+
+    .winner-message {
+        padding: 20px;
+
+        font-size: 0.94rem;
+    }
 }

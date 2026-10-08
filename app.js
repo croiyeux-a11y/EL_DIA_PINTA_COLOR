@@ -1,14 +1,27 @@
+// ============================================================
+// EL COLOR DEL DÍA
+// ============================================================
+
+// ------------------------------------------------------------
+// SUPABASE
+// ------------------------------------------------------------
+
 const SUPABASE_URL =
     "https://uxzkjrilvsslicjcodvr.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_eex5Cl9YrYkmwXGaOsTY-w_rc_N8PtL";
 
-const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-);
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+    );
 
+
+// ------------------------------------------------------------
+// ELEMENTOS HTML
+// ------------------------------------------------------------
 
 const pollDate =
     document.getElementById("poll-date");
@@ -38,107 +51,280 @@ const resultsContainer =
     document.getElementById("results-container");
 
 
+// ------------------------------------------------------------
+// ESTADO
+// ------------------------------------------------------------
+
 let encuestaActual = null;
 
 
+// ------------------------------------------------------------
+// EMOJIS
+// ------------------------------------------------------------
+
+const emojis = {
+
+    verde: "🐸",
+    blanco: "🐑",
+    morado: "🍇",
+    beige: "🐻",
+
+    azul: "🐳",
+    marron: "🍫",
+    granate: "🍷",
+    lila: "🦄",
+
+    fucsia: "🦩",
+    crema: "🍦",
+    rojo: "🍓",
+    negro: "🐈‍⬛",
+
+    rosa: "🌸",
+    naranja: "🦊",
+    amarillo: "🐥"
+};
+
+
+// ------------------------------------------------------------
+// MENSAJES FINALES
+// ------------------------------------------------------------
+
+const mensajesDelDia = {
+
+    0: {
+        titulo: "RESULTADOS DEL DOMINGO",
+
+        texto: `
+Después de dedicar una cantidad de tiempo completamente injustificable a decidir qué color nos viste el lunes...
+
+**[COLOR GANADOR]** ha ganado.
+
+¿Era necesario hacer una encuesta para esto?
+
+**Absolutamente no.**
+
+¿La hemos hecho igualmente?
+
+**Por supuesto.**
+
+Gracias por participar en esta magnífica pérdida de tiempo colectiva.
+
+Ahora ya sabemos cómo empezaremos el lunes.
+
+**Como si el lunes no fuera suficientemente malo por sí solo.**
+
+Mañana continuamos con asuntos igual de triviales.
+
+Lunes de [COLOR GANADOR] [EMOJI]
+`
+    },
+
+
+    1: {
+        titulo: "EL LUNES NO PODÍA SER PEOR...",
+
+        texto: `
+Y entonces decidimos seguir perdiendo el tiempo para votar un color.
+
+Tras una jornada de desempleo, sufrimiento y decisiones que probablemente nadie necesitaba tomar:
+
+**[COLOR GANADOR]**
+
+es oficialmente el color ganador de hoy.
+
+Hemos perdido unos minutos de nuestra vida en esto.
+
+**Pero al menos ahora sabemos algo completamente innecesario.**
+
+Mañana volveremos a hacerlo. Porque aprender de nuestros errores no estaba en el programa.
+
+Martes de [COLOR GANADOR] [EMOJI]
+`
+    },
+
+
+    2: {
+        titulo: "LA DEMOCRACIA QUE NADIE HABÍA PEDIDO",
+
+        texto: `
+Hemos votado.
+
+Hemos contado votos.
+
+Hemos calculado porcentajes.
+
+Hemos utilizado tecnología para resolver una cuestión que ni siquiera requería solución.
+
+Pero ya que hemos llegado hasta aquí...
+
+**[COLOR GANADOR]** es el ganador.
+
+Gracias por contribuir a esta pérdida de tiempo perfectamente organizada.
+
+Miércoles de [COLOR GANADOR] [EMOJI]
+`
+    },
+
+
+    3: {
+        titulo: "MIÉRCOLES — YA ESTAMOS EN TIERRA DERECHA",
+
+        texto: `
+Hemos llegado al ombligo de la semana.
+
+Lunes superado, martes superado y el miércoles ya cae.
+
+**El finde ya empieza a asomar por el horizonte.**
+
+Desde aquí todo es cuesta abajo.
+
+Pero antes de llegar al viernes tenemos que resolver una cuestión de vital importancia.
+
+Después de una votación absolutamente necesaria para la supervivencia de nadie...
+
+**[COLOR GANADOR]**
+
+se proclama ganador.
+
+¿Era necesario votar?
+
+**No.**
+
+¿Hemos perdido unos minutos de nuestra vida en esto?
+
+**Por supuesto.**
+
+Pero ya estamos en tierra derecha.
+
+**Aguantamos un poquito más. El finde está cada vez más cerca.**
+
+Jueves de [COLOR GANADOR] [EMOJI]
+`
+    },
+
+
+    4: {
+        titulo: "YA CASI ES VIERNES",
+
+        texto: `
+Hemos llegado al jueves. Con altos y bajos, pero hemos llegado, que es lo importante.
+
+Solo queda un último esfuerzo y podremos dejar de fingir que venimos por gusto y no por la beca.
+
+Pero antes de celebrar el fin de semana, tenemos una última decisión que tomar.
+
+Después de una semana entera votando colores, perdiendo el tiempo y tomando decisiones de dudosa importancia...
+
+**Viernes de [COLOR GANADOR] [EMOJI].**
+
+¿Hemos solucionado algún problema?
+
+**No.**
+
+¿Hemos aprovechado nuestro tiempo?
+
+**Tampoco, pero lo disfrutamos.**
+
+¿Ha merecido la pena?
+
+**Cada segundo y cada byte gastado.**
+
+Porque mañana es viernes y el cuerpo lo sabe.
+
+¿Sale cafecito? ¿Unas cañas? ¿Picoteo? ¿Terrazeo? ¿Tardeo? ¿Tercer tiempo? ¿Se lía? ¿Un reseteo necesario?
+
+Eso ya depende de los que se sumen.
+
+Si tu respuesta es no, todavía estás a tiempo de solucionarlo. Siempre se puede hacer el milagro.
+
+Organízate. Pide permiso o avisa en el trabajo, en casa, invita al/la toxic@. Ve al médico y coméntale que justo hoy viernes te sientes fatal, que no puedes con tu vida y que solo se te pasa con **Terraceoform, Tardeodol Forte, Cervezil, Aperifast, Picoteum, Afterwork XR, Neuronic Forte.**
+
+**Un tiempo de camaradería y de compartir nunca viene mal.**
+
+Pero si, por el contrario, tu respuesta es sí:
+
+Avisa en casa, organiza tus tiempos, prepara el outfit, invita al/la toxic@, asalta la hucha, no olvides la tarjeta...
+
+**Y ya nos organizamos con Manuel.**
+`
+    }
+};
+
+
+// ------------------------------------------------------------
+// INICIO
+// ------------------------------------------------------------
+
 document.addEventListener(
     "DOMContentLoaded",
-    cargarEncuesta
+    iniciarAplicacion
 );
 
 
-async function cargarEncuesta() {
+async function iniciarAplicacion() {
 
-    mostrarMensaje(
-        "Cargando encuesta..."
+    await actualizarAplicacion();
+
+    setInterval(
+        actualizarAplicacion,
+        60000
     );
+}
+
+
+// ------------------------------------------------------------
+// ACTUALIZAR APLICACIÓN
+// ------------------------------------------------------------
+
+async function actualizarAplicacion() {
 
     try {
 
-        /*
-         * Comprobamos primero si estamos
-         * dentro del horario de votación:
-         *
-         * 14:00 → 01:00
-         */
-        const { data: horario, error: errorHorario } =
-            await supabaseClient.rpc(
-                "esta_en_horario_de_votacion"
-            );
+        const {
+            data: horario,
+            error: errorHorario
+        } = await supabaseClient.rpc(
+            "esta_en_horario_de_votacion"
+        );
+
 
         if (errorHorario) {
             throw errorHorario;
         }
 
 
-        /*
-         * Fuera del horario:
-         * no mostramos las opciones ni
-         * permitimos votar.
-         */
-        if (!horario) {
+        const {
+            data: encuestas,
+            error: errorEncuesta
+        } = await supabaseClient.rpc(
+            "obtener_encuesta_activa"
+        );
 
-            pollDate.textContent = "";
 
-            pollTitle.textContent =
-                "La votación está cerrada";
+        if (errorEncuesta) {
+            throw errorEncuesta;
+        }
 
-            optionsContainer.innerHTML = `
-                <p class="loading">
-                    La encuesta abre todos los días a las 14:00
-                    y cierra a la 01:00.
-                </p>
-            `;
 
-            voteButton.disabled = true;
+        if (
+            !encuestas ||
+            encuestas.length === 0
+        ) {
 
-            limpiarMensaje();
+            mostrarFinDeSemana();
 
             return;
         }
 
 
-        /*
-         * Estamos dentro del horario.
-         * Cargamos la encuesta activa.
-         */
-        const { data, error } =
-            await supabaseClient.rpc(
-                "obtener_encuesta_activa"
-            );
-
-        if (error) {
-            throw error;
-        }
+        encuestaActual =
+            encuestas[0];
 
 
-        if (!data || data.length === 0) {
-
-            pollDate.textContent = "";
-
-            pollTitle.textContent =
-                "No hay ninguna encuesta activa";
-
-            optionsContainer.innerHTML = `
-                <p class="loading">
-                    La encuesta de hoy todavía no está disponible.
-                </p>
-            `;
-
-            voteButton.disabled = true;
-
-            limpiarMensaje();
-
-            return;
-        }
-
-
-        encuestaActual = data[0];
-
-
-        pollTitle.innerHTML =
-            `¿Qué color pinta hoy?<br>
-            <span>Elige un color y fingimos que tenemos un plan.</span>`;
+        console.log(
+            "Encuesta actual:",
+            encuestaActual
+        );
 
 
         pollDate.textContent =
@@ -147,117 +333,184 @@ async function cargarEncuesta() {
             );
 
 
-        await cargarOpciones();
+        const dia =
+            obtenerDiaSemana(
+                encuestaActual.fecha
+            );
 
 
-        limpiarMensaje();
+        if (horario === true) {
+
+            await mostrarVotacion();
+
+        } else {
+
+            await mostrarResultadosFinales(
+                dia
+            );
+        }
+
 
     } catch (error) {
 
         console.error(
-            "Error cargando la encuesta:",
+            "Error actualizando la aplicación:",
             error
         );
 
-        mostrarMensaje(
-            "No se ha podido cargar la encuesta.",
-            "error"
-        );
+        mostrarErrorGeneral();
     }
 }
 
 
-async function cargarOpciones() {
+// ------------------------------------------------------------
+// MOSTRAR VOTACIÓN
+// ------------------------------------------------------------
 
-    const { data, error } =
-        await supabaseClient.rpc(
-            "obtener_opciones_activas"
-        );
+async function mostrarVotacion() {
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+
+    pollForm.style.display =
+        "block";
+
+
+    pollTitle.innerHTML =
+        `
+        ¿Qué color pinta hoy?<br>
+        <span>
+            Elige un color y fingimos que tenemos un plan.
+        </span>
+        `;
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient.rpc(
+        "obtener_opciones_activas"
+    );
+
 
     if (error) {
         throw error;
     }
 
 
-    if (!data || data.length === 0) {
+    if (
+        !data ||
+        data.length === 0
+    ) {
 
-        optionsContainer.innerHTML = `
+        optionsContainer.innerHTML =
+            `
             <p class="loading">
-                No hay opciones disponibles.
+                No hay opciones disponibles para hoy.
             </p>
-        `;
+            `;
 
-        voteButton.disabled = true;
+        voteButton.disabled =
+            true;
 
         return;
     }
 
 
-    optionsContainer.innerHTML = "";
+    optionsContainer.innerHTML =
+        "";
 
 
-    const emojis = {
-        1: "🌊",
-        2: "🫒",
-        3: "🐪",
-        4: "🖤",
-        5: "👻"
-    };
+    data.forEach(
+        opcion => {
+
+            const optionId =
+                `color-${opcion.id}`;
 
 
-    data.forEach((opcion) => {
-
-        const optionId =
-            `color-${opcion.id}`;
-
-
-        const emoji =
-            emojis[opcion.id] || "";
+            const nombre =
+                String(
+                    opcion.nombre || ""
+                );
 
 
-        const optionHTML = `
+            const clave =
+                normalizarColor(
+                    nombre
+                );
 
-            <div class="color-option">
 
-                <input
-                    type="radio"
-                    id="${optionId}"
-                    name="opcion"
-                    value="${opcion.id}"
-                    required
+            const emoji =
+                emojis[clave] || "🎨";
+
+
+            const color =
+                opcion.color_hex ||
+                "#eeeeee";
+
+
+            optionsContainer.insertAdjacentHTML(
+                "beforeend",
+                `
+                <div
+                    class="color-option"
+                    style="--option-color: ${escapeAttribute(color)};"
                 >
 
-                <label for="${optionId}">
+                    <input
+                        type="radio"
+                        id="${optionId}"
+                        name="opcion"
+                        value="${opcion.id}"
+                        required
+                    >
 
-                    <span
-                        class="color-preview"
-                        style="background-color: ${opcion.color_hex};"
-                        aria-hidden="true"
-                    ></span>
+                    <label
+                        for="${optionId}"
+                        style="background-color: ${escapeAttribute(color)};"
+                    >
 
-                    <span class="color-name">
+                        <span class="color-name">
+                            ${escapeHTML(nombre)}
+                        </span>
 
-                        ${escapeHTML(opcion.nombre)}
+                        <span
+                            class="color-emoji"
+                            aria-hidden="true"
+                        >
+                            ${emoji}
+                        </span>
 
-                        ${emoji}
+                    </label>
 
-                    </span>
-
-                </label>
-
-            </div>
-
-        `;
+                </div>
+                `
+            );
+        }
+    );
 
 
-        optionsContainer.insertAdjacentHTML(
-            "beforeend",
-            optionHTML
-        );
+    personaInput.disabled =
+        false;
 
-    });
+
+    voteButton.disabled =
+        false;
+
+
+    voteButton.textContent =
+        "Votar";
+
+
+    await cargarParticipantes();
 }
 
+
+// ------------------------------------------------------------
+// REGISTRAR VOTO
+// ------------------------------------------------------------
 
 pollForm.addEventListener(
     "submit",
@@ -276,6 +529,42 @@ async function registrarVoto(event) {
             "No hay una encuesta activa.",
             "error"
         );
+
+        return;
+    }
+
+
+    const {
+        data: horario,
+        error: errorHorario
+    } = await supabaseClient.rpc(
+        "esta_en_horario_de_votacion"
+    );
+
+
+    if (errorHorario) {
+
+        console.error(
+            errorHorario
+        );
+
+        mostrarMensaje(
+            "No se ha podido comprobar el horario de votación.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (horario !== true) {
+
+        mostrarMensaje(
+            "La votación ya está cerrada.",
+            "error"
+        );
+
+        await actualizarAplicacion();
 
         return;
     }
@@ -305,7 +594,7 @@ async function registrarVoto(event) {
     if (nombre.length < 2) {
 
         mostrarMensaje(
-            "Escribe tu nombre.",
+            "El nombre debe tener al menos 2 caracteres.",
             "error"
         );
 
@@ -334,7 +623,69 @@ async function registrarVoto(event) {
         );
 
 
-    voteButton.disabled = true;
+    const encuestaIdRaw =
+        encuestaActual?.id ??
+        encuestaActual?.encuesta_id ??
+        encuestaActual?.encuestaId;
+
+
+    const encuestaId =
+        Number(
+            encuestaIdRaw
+        );
+
+
+    console.log(
+        "ID de encuesta utilizado:",
+        encuestaId
+    );
+
+
+    console.log(
+        "Encuesta completa:",
+        encuestaActual
+    );
+
+
+    if (
+        !Number.isInteger(
+            encuestaId
+        )
+    ) {
+
+        console.error(
+            "No se ha encontrado un ID válido de encuesta.",
+            encuestaActual
+        );
+
+
+        mostrarMensaje(
+            "No se ha podido identificar la encuesta actual.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (
+        !Number.isInteger(
+            opcionId
+        )
+    ) {
+
+        mostrarMensaje(
+            "La opción seleccionada no es válida.",
+            "error"
+        );
+
+        return;
+    }
+
+
+    voteButton.disabled =
+        true;
+
 
     voteButton.textContent =
         "Registrando voto...";
@@ -342,20 +693,22 @@ async function registrarVoto(event) {
 
     try {
 
-        const { data, error } =
-            await supabaseClient.rpc(
-                "registrar_voto",
-                {
-                    p_encuesta_id:
-                        encuestaActual.id,
+        const {
+            data,
+            error
+        } = await supabaseClient.rpc(
+            "registrar_voto_app",
+            {
+                p_encuesta_id:
+                    encuestaId,
 
-                    p_opcion_id:
-                        opcionId,
+                p_opcion_id:
+                    opcionId,
 
-                    p_persona:
-                        nombre
-                }
-            );
+                p_persona:
+                    nombre
+            }
+        );
 
 
         if (error) {
@@ -370,9 +723,7 @@ async function registrarVoto(event) {
 
 
         mostrarMensaje(
-            `¡Ya has votado!
-El plan sigue adelante. Nadie sabe cuál, pero sigue adelante.
-Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
+            "¡Voto registrado!\nYa formas parte de esta magnífica pérdida de tiempo.",
             "success"
         );
 
@@ -391,13 +742,14 @@ Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
             )
             .forEach(
                 input => {
+
                     input.disabled =
                         true;
                 }
             );
 
 
-        await cargarResultados();
+        await cargarParticipantes();
 
 
     } catch (error) {
@@ -409,7 +761,9 @@ Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
 
 
         mostrarMensaje(
-            obtenerMensajeError(error),
+            obtenerMensajeError(
+                error
+            ),
             "error"
         );
 
@@ -424,89 +778,581 @@ Que mañana Manuel venga con el modo "nos vamos pronto" activado.`,
 }
 
 
-async function cargarResultados() {
+// ------------------------------------------------------------
+// RESULTADOS FINALES
+// ------------------------------------------------------------
 
-    const { data, error } =
-        await supabaseClient.rpc(
-            "obtener_resultados"
-        );
+async function mostrarResultadosFinales(
+    dia
+) {
+
+    pollForm.style.display =
+        "none";
 
 
-    if (error) {
-        throw error;
+    const {
+        data: resultados,
+        error: errorResultados
+    } = await supabaseClient.rpc(
+        "obtener_resultados"
+    );
+
+
+    if (errorResultados) {
+        throw errorResultados;
     }
 
 
-    if (!data) {
-        return;
-    }
+    mostrarGanador(
+        resultados || [],
+        dia
+    );
 
 
-    resultsContainer.innerHTML =
-        "";
+    await cargarParticipantes();
+}
 
 
-    data.forEach((resultado) => {
+// ------------------------------------------------------------
+// MOSTRAR GANADOR
+// ------------------------------------------------------------
 
-        const porcentaje =
-            Number(
-                resultado.porcentaje
-            ) || 0;
-
-
-        const resultHTML = `
-
-            <div class="result-item">
-
-                <div class="result-top">
-
-                    <span class="result-name">
-
-                        ${escapeHTML(
-                            resultado.nombre
-                        )}
-
-                    </span>
-
-                    <span class="result-percentage">
-
-                        ${porcentaje}%
-
-                    </span>
-
-                </div>
-
-
-                <div class="result-bar">
-
-                    <div
-                        class="result-fill"
-                        style="
-                            width: ${porcentaje}%;
-                            background-color: ${resultado.color_hex};
-                        "
-                    ></div>
-
-                </div>
-
-            </div>
-
-        `;
-
-
-        resultsContainer.insertAdjacentHTML(
-            "beforeend",
-            resultHTML
-        );
-
-    });
-
+function mostrarGanador(
+    resultados,
+    dia
+) {
 
     resultsSection.classList.remove(
         "hidden"
     );
+
+
+    /*
+     * Comprobamos el TOTAL de votos.
+     * Si todos tienen 0 votos, no existe ganador.
+     */
+    const totalVotos =
+        (resultados || []).reduce(
+            (total, resultado) => {
+
+                return total +
+                    (Number(resultado.votos) || 0);
+
+            },
+            0
+        );
+
+
+    if (
+        !resultados ||
+        resultados.length === 0 ||
+        totalVotos === 0
+    ) {
+
+        const mensajeDia =
+            mensajesDelDia[dia];
+
+
+        const titulo =
+            mensajeDia?.titulo ||
+            "RESULTADOS DEL DÍA";
+
+
+        resultsContainer.innerHTML =
+            `
+            <article class="winner-card">
+
+                <p
+                    class="winner-day-title"
+                    style="
+                        display: block;
+                        box-sizing: border-box;
+                        width: 100%;
+                        margin: 0;
+                        padding: 14px 18px 16px;
+                        font-size: 1.15rem;
+                        line-height: 1.3;
+                        letter-spacing: 0.12em;
+                        text-align: left;
+                        overflow: visible;
+                    "
+                >
+                    ${escapeHTML(titulo)}
+                </p>
+
+                <div
+                    style="
+                        padding: 30px 24px;
+                        text-align: center;
+                    "
+                >
+                    <h3
+                        style="
+                            margin: 0 0 14px;
+                            font-size: 1.8rem;
+                            line-height: 1.2;
+                        "
+                    >
+                        Todavía no hay ganador
+                    </h3>
+
+                    <p
+                        style="
+                            margin: 0;
+                            font-size: 1rem;
+                            line-height: 1.6;
+                        "
+                    >
+                        Todavía no ha votado nadie.
+                        La democracia decidió no presentarse.
+                    </p>
+                </div>
+
+            </article>
+            `;
+
+        return;
+    }
+
+
+    /*
+     * Ordenar por número de votos.
+     */
+    const resultadosOrdenados =
+        [...resultados].sort(
+            (a, b) => {
+
+                const votosA =
+                    Number(
+                        a.votos
+                    ) || 0;
+
+                const votosB =
+                    Number(
+                        b.votos
+                    ) || 0;
+
+                return votosB - votosA;
+            }
+        );
+
+
+    const ganador =
+        resultadosOrdenados[0];
+
+
+    const nombre =
+        String(
+            ganador.nombre || ""
+        );
+
+
+    const clave =
+        normalizarColor(
+            nombre
+        );
+
+
+    const emoji =
+        emojis[clave] || "🎨";
+
+
+    const color =
+        ganador.color_hex ||
+        "#eeeeee";
+
+
+    const votos =
+        Number(
+            ganador.votos
+        ) || 0;
+
+
+    const mensajeDia =
+        mensajesDelDia[dia];
+
+
+    let titulo =
+        mensajeDia?.titulo ||
+        "RESULTADOS DEL DÍA";
+
+
+    let texto =
+        mensajeDia?.texto ||
+        "Este es el resultado del día.";
+
+
+    texto =
+        texto
+            .replaceAll(
+                "[COLOR GANADOR]",
+                escapeHTML(nombre)
+            )
+            .replaceAll(
+                "[EMOJI]",
+                emoji
+            );
+
+
+    texto =
+        convertirMarkdownBasico(
+            texto
+        );
+
+
+    texto =
+        texto.replace(
+            /\n/g,
+            "<br>"
+        );
+
+
+    resultsContainer.innerHTML =
+        `
+        <article
+            class="winner-card"
+            style="--winner-color: ${escapeAttribute(color)};"
+        >
+
+            <p
+                class="winner-day-title"
+                style="
+                    display: block;
+                    box-sizing: border-box;
+                    width: 100%;
+                    margin: 0;
+                    padding: 14px 18px 16px;
+                    font-size: 1.15rem;
+                    line-height: 1.3;
+                    letter-spacing: 0.12em;
+                    text-align: left;
+                    overflow: visible;
+                "
+            >
+                ${escapeHTML(titulo)}
+            </p>
+
+
+            <div
+                class="winner-color"
+                style="
+                    background-color: ${escapeAttribute(color)};
+                    height: 135px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                "
+                aria-label="Color ganador: ${escapeAttribute(nombre)}"
+            >
+            </div>
+
+
+            <h3
+                class="winner-name"
+                style="
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+                    margin: 16px 14px 8px;
+                    font-size: 2rem;
+                    line-height: 1.2;
+                "
+            >
+                <span>
+                    ${escapeHTML(nombre)}
+                </span>
+
+                <span
+                    class="winner-emoji"
+                    style="
+                        font-size: 2.2rem;
+                        line-height: 1;
+                    "
+                    aria-hidden="true"
+                >
+                    ${emoji}
+                </span>
+            </h3>
+
+
+            <p class="winner-votes">
+                ${votos}
+                ${votos === 1 ? "voto" : "votos"}
+            </p>
+
+
+            <div class="winner-message">
+                ${texto}
+            </div>
+
+        </article>
+        `;
 }
 
+
+// ------------------------------------------------------------
+// PARTICIPANTES
+// ------------------------------------------------------------
+
+async function cargarParticipantes() {
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient.rpc(
+            "obtener_participantes"
+        );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        mostrarParticipantes(
+            data || []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Error cargando participantes:",
+            error
+        );
+    }
+}
+
+
+function mostrarParticipantes(
+    participantes
+) {
+
+    const nombres =
+        [
+            ...new Set(
+                participantes
+                    .map(
+                        participante =>
+                            participante.persona
+                    )
+                    .filter(Boolean)
+            )
+        ];
+
+
+    let contenedor =
+        document.getElementById(
+            "participants-container"
+        );
+
+
+    if (!contenedor) {
+
+        contenedor =
+            document.createElement(
+                "div"
+            );
+
+
+        contenedor.id =
+            "participants-container";
+
+
+        if (
+            pollForm.style.display !==
+            "none"
+        ) {
+
+            pollForm.insertAdjacentElement(
+                "afterend",
+                contenedor
+            );
+
+        } else {
+
+            resultsContainer.insertAdjacentElement(
+                "afterend",
+                contenedor
+            );
+        }
+    }
+
+
+    if (
+        nombres.length === 0
+    ) {
+
+        contenedor.innerHTML =
+            `
+            <div class="participants-card">
+
+                <p class="eyebrow">
+                    PARTICIPANTES
+                </p>
+
+                <p>
+                    Todavía no ha votado nadie.
+                </p>
+
+            </div>
+            `;
+
+        return;
+    }
+
+
+    const lista =
+        nombres
+            .map(
+                nombre =>
+                    `
+                    <li>
+                        ${escapeHTML(nombre)}
+                    </li>
+                    `
+            )
+            .join("");
+
+
+    contenedor.innerHTML =
+        `
+        <div class="participants-card">
+
+            <p class="eyebrow">
+                PARTICIPANTES
+            </p>
+
+            <p class="participants-intro">
+                Hoy han participado:
+            </p>
+
+            <ul class="participants-list">
+                ${lista}
+            </ul>
+
+        </div>
+        `;
+}
+
+
+// ------------------------------------------------------------
+// VIERNES Y SÁBADO
+// ------------------------------------------------------------
+
+function mostrarFinDeSemana() {
+
+    encuestaActual =
+        null;
+
+
+    pollDate.textContent =
+        "";
+
+
+    pollTitle.innerHTML =
+        `
+        Hoy no hay votación<br>
+        <span>
+            La encuesta vuelve el domingo.
+        </span>
+        `;
+
+
+    pollForm.style.display =
+        "none";
+
+
+    resultsSection.classList.add(
+        "hidden"
+    );
+
+
+    optionsContainer.innerHTML =
+        "";
+
+
+    limpiarMensaje();
+
+
+    const participantes =
+        document.getElementById(
+            "participants-container"
+        );
+
+
+    if (participantes) {
+
+        participantes.remove();
+    }
+}
+
+
+// ------------------------------------------------------------
+// DÍA DE LA SEMANA
+// ------------------------------------------------------------
+
+function obtenerDiaSemana(
+    fecha
+) {
+
+    const partes =
+        fecha.split("-");
+
+
+    const fechaLocal =
+        new Date(
+            Number(partes[0]),
+            Number(partes[1]) - 1,
+            Number(partes[2])
+        );
+
+
+    return fechaLocal.getDay();
+}
+
+
+// ------------------------------------------------------------
+// NORMALIZAR COLOR
+// ------------------------------------------------------------
+
+function normalizarColor(
+    texto
+) {
+
+    return String(
+        texto || ""
+    )
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
+        )
+        .trim();
+}
+
+
+// ------------------------------------------------------------
+// MARKDOWN BÁSICO
+// ------------------------------------------------------------
+
+function convertirMarkdownBasico(
+    texto
+) {
+
+    return texto.replace(
+        /\*\*(.*?)\*\*/g,
+        "<strong>$1</strong>"
+    );
+}
+
+
+// ------------------------------------------------------------
+// MENSAJES
+// ------------------------------------------------------------
 
 function mostrarMensaje(
     texto,
@@ -514,8 +1360,12 @@ function mostrarMensaje(
 ) {
 
     message.innerHTML =
-        escapeHTML(texto)
-            .replace(/\n/g, "<br>");
+        escapeHTML(
+            texto
+        ).replace(
+            /\n/g,
+            "<br>"
+        );
 
 
     message.className =
@@ -528,10 +1378,28 @@ function limpiarMensaje() {
     message.textContent =
         "";
 
+
     message.className =
         "message";
 }
 
+
+// ------------------------------------------------------------
+// ERROR GENERAL
+// ------------------------------------------------------------
+
+function mostrarErrorGeneral() {
+
+    mostrarMensaje(
+        "No se ha podido cargar la encuesta. Recarga la página.",
+        "error"
+    );
+}
+
+
+// ------------------------------------------------------------
+// FORMATEAR FECHA
+// ------------------------------------------------------------
 
 function formatearFecha(
     fecha
@@ -561,6 +1429,10 @@ function formatearFecha(
 }
 
 
+// ------------------------------------------------------------
+// SEGURIDAD HTML
+// ------------------------------------------------------------
+
 function escapeHTML(
     texto
 ) {
@@ -579,30 +1451,58 @@ function escapeHTML(
 }
 
 
+function escapeAttribute(
+    texto
+) {
+
+    return String(
+        texto
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        );
+}
+
+
+// ------------------------------------------------------------
+// MENSAJES DE ERROR
+// ------------------------------------------------------------
+
 function obtenerMensajeError(
     error
 ) {
 
-    const mensaje =
+    const mensajeError =
         error?.message || "";
 
 
     if (
-        mensaje.includes(
+        mensajeError.includes(
             "La votación está cerrada"
         )
     ) {
 
         return (
-            "La votación está cerrada. " +
-            "Abre todos los días a las 14:00 " +
-            "y cierra a la 01:00."
+            "La votación está cerrada."
         );
     }
 
 
     if (
-        mensaje.includes(
+        mensajeError.includes(
             "El nombre debe tener al menos 2 caracteres"
         )
     ) {
@@ -614,7 +1514,7 @@ function obtenerMensajeError(
 
 
     if (
-        mensaje.includes(
+        mensajeError.includes(
             "El nombre no puede superar los 60 caracteres"
         )
     ) {
@@ -626,7 +1526,7 @@ function obtenerMensajeError(
 
 
     if (
-        mensaje.includes(
+        mensajeError.includes(
             "La encuesta no está activa"
         )
     ) {
@@ -638,13 +1538,23 @@ function obtenerMensajeError(
 
 
     if (
-        mensaje.includes(
+        mensajeError.includes(
             "La opción seleccionada no pertenece"
         )
     ) {
 
         return (
             "La opción seleccionada no es válida."
+        );
+    }
+
+
+    if (
+        error?.code === "PGRST202"
+    ) {
+
+        return (
+            "No se ha podido conectar con la función de votación."
         );
     }
 
